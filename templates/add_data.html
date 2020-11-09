@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+ 
+{% block content %}
+
+{{ super() }}
+<form action="{{url_for('addData')}}" method="post" class="form-contact">
+<table>
+<th>
+
+<select name="currency">
+  {% for code in codes %}
+		<option value="{{code.code}}" {%if code.code==currency%}selected{%endif%} >{{code.name}}</option>
+	{% endfor %}
+</select>  
+</th>
+<th>Даты:
+<input type="date" id="start" name="date_start" value="{%if request.form['date_start'] %}{{request.form['date_start']}}{%else%}2020-11-01{%endif%}"> <b>-</b>
+<input type="date" id="end" name="date_end" value="{%if request.form['date_end'] %}{{request.form['date_end']}}{%else%}2020-11-10{%endif%}">
+</th>
+<th>	 
+<input type="submit" value="Добавить" />
+</th>
+</table>
+</form>
+
+{% for cat, msg in get_flashed_messages(True) %}
+
+<div class="flash {{cat}}">{{msg}}</div>
+{% endfor %}
+{% endblock %}

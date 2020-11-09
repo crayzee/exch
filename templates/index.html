@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+ 
+{% block content %}
+
+{{ super() }}
+{{jsons}}
+<hr>
+
+<form action="{{url_for('index')}}" method="POST" class="form-contact">
+	<table>
+		<th>
+		<select name="currency">
+			{% for code in codes %}
+			<option value="{{code.code}}" {%if code.code==currency%}selected{%endif%} >{{code.name}}</option>
+			{% endfor %}
+		</select>
+	</th>
+	<th>Даты:
+		
+	<input type="date" id="start" name="date_start" value="{%if request.form['date_start'] %}{{request.form['date_start']}}{%else%}2020-11-01{%endif%}"> 			 
+	<b>-</b>
+	<input type="date" id="end" name="date_end" value="{%if request.form['date_end'] %}{{request.form['date_end']}}{%else%}2020-11-10{%endif%}">
+	
+	</th>
+	<th>
+		<label for="sort">Сортировать по дате:</label>	
+		<select name="sort">	
+			<option value="desc" {% if sort=='desc' %}selected{%endif%}>Новые сперва</option>	
+			<option value="asc" {% if sort=='asc' %}selected{%endif%}>Старые сперва</option>
+		</select>
+	</th>
+	<th>
+	<input type="submit" value="Посмотреть" />
+	</th>
+	</table>
+</form>
+
+
+<table>
+	{% if rates %}
+	<tr>
+		<th class="heading">Валюта</th>
+		<th class="heading">Номинал</th>
+		<th class="heading">Дата</th>
+		<th class="heading">Курс</th>
+	</tr>
+	{%endif%}
+	{% if rates %}
+	{% for p in rates %}
+	<tr>	
+		<td>{{ p.name }}</td>
+		<td>{{ p.nominal }}</td>
+		<td>{{ p.date_rate }}</td>
+		<td>{{ p.exchange_rate }}</td>
+	</tr>
+	{% endfor %}
+	{%else%}
+	{% for cat, msg in get_flashed_messages(True) %}
+	<div class="flash {{cat}}">{{msg}}</div>
+	{% endfor %}	 
+	 {%endif%}
+</table>
+
+{% endblock %}
